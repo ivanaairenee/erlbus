@@ -1,6 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <style>
+      body, div, button, input {
+        font-family: 'Nunito', sans-serif;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .mainContainer {
+        padding: 12px;
+        width: 500px;
+      }
+
+      .chatContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      input {
+        border-radius: 4px;
+        border: 1px solid grey;
+        padding: 8px;
+        margin: 12px 0;
+      }
+    </style>
       <title>ErlBus Chat</title>
       <script src="/assets/jquery.js"></script>
       <script type="text/javascript">
@@ -19,7 +48,8 @@
         };
 
         function connect() {
-        wsHost = "ws://" + window.location.host + "/websocket";
+        var name = jQuery("#name").val();
+        wsHost = "ws://" + window.location.host + "/websocket" + "?name=" + name;
         websocket = new WebSocket(wsHost);
         websocket.onopen = function(evt) { onOpen(evt) }; 
         websocket.onclose = function(evt) { onClose(evt) }; 
@@ -28,6 +58,8 @@
       }; 
 
       function onOpen(evt) { 
+        jQuery('#name').hide();
+        jQuery('#connectButton').hide();
         jQuery('#roomContainer').fadeIn('slow');
       };  
 
@@ -72,19 +104,22 @@
       </style>
   </head>
   <body>
-    <div id="alertContainer"></div>
-    <input id="connectButton" type="button" value="Join the Chat Room!" onclick="connect();"/>
+    <div class="mainContainer">
+      <div id="alertContainer"></div>
+      <input id="name" type="text" placeholder="Enter your name" />
+      <input id="connectButton" type="button" value="Join the Chat Room!" onclick="connect();"/>
 
-    <div id="roomContainer">
-      <div id="chatContainer"></div>
-      <form onsubmit="sendMessage(); return false;">
-        <span>
-          <input id="textToSend" type="text" />
-        </span>
-        <span>
-          <input type="submit" value="send"/> 
-        </span>
-      </form>
+      <div id="roomContainer">
+        <div id="chatContainer"></div>
+        <form onsubmit="sendMessage(); return false;">
+          <span>
+            <input id="textToSend" type="text" />
+          </span>
+          <span>
+            <input type="submit" value="send"/> 
+          </span>
+        </form>
+      </div>
     </div>
   </body>
 </html>
